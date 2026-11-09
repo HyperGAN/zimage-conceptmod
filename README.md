@@ -10,8 +10,8 @@ and complete edit-bundle format.
 Install conceptmod 3 and this package in the same Python environment:
 
 ```bash
-python -m pip install -e /path/to/conceptmod
-python -m pip install -e .
+python -m pip install "conceptmod @ git+https://github.com/HyperGAN/conceptmod.git@main"
+python -m pip install .
 conceptmod backends
 cat > edit.json <<'JSON'
 {"backend": {"device": "cuda:0", "lora_rank": 16}}
@@ -38,10 +38,16 @@ only when constructing the real backend; no weights are shipped in this
 package. Use the same model revision/local checkpoint when restoring an edit.
 Diffusers is pinned to the supported `0.39.0` release; this package does not
 install a floating Git checkout. The backend does not enable
-`trust_remote_code`. Local tensor formats use safetensors; Supra's native
-checkpoint reader uses `torch.load(..., weights_only=True)`.
+`trust_remote_code`.
+
+Training checkpoints declare the frozen execution modules as well as the
+trainable adapters, and validate model configuration and tokenizer behavior.
+Inference bundles contain the edited components.
 
 ## Validation
+
+The CPU workflow builds and installs a wheel, then runs the offline tests from
+a temporary directory with importlib mode so the checkout cannot shadow it.
 
 ```bash
 python -m pip install -e '.[dev]'
@@ -59,9 +65,9 @@ No GPU test was run as part of this extraction.
 ## Origin
 
 Extracted from `HyperGAN/conceptmod` at
-`9a8a0c7f85c767a9222114d5d73706d85a2910f5`. Model computations and tensor mappings were retained; package
+`70f0cb2632190388eb4028ef80066558259494fc`. Model computations and tensor mappings were retained; package
 imports, provider metadata and test routing were moved to this product.
 The original MIT license and attribution are retained in [LICENSE](LICENSE).
 See [docs/origin.md](docs/origin.md) for the transferred-file inventory.
 
-Historical experiments remain in the immutable [source snapshot](https://github.com/HyperGAN/conceptmod/tree/9a8a0c7f85c767a9222114d5d73706d85a2910f5/outputs).
+Historical experiments remain in the immutable [source snapshot](https://github.com/HyperGAN/conceptmod/tree/70f0cb2632190388eb4028ef80066558259494fc/outputs).
