@@ -1,0 +1,41 @@
+[build-system]
+requires = ["setuptools>=77", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "zimage-conceptmod"
+version = "0.1.0"
+description = "Z-Image Turbo model provider for conceptmod"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "MIT"
+license-files = ["LICENSE"]
+dependencies = [
+    "conceptmod>=3.0.0,<4",
+    "torch>=2.8,<3",
+    "diffusers==0.39.0",
+    "transformers>=4.57.6,<5",
+    "peft>=0.21.2,<0.22",
+    "accelerate>=1,<2",
+    "safetensors>=0.6,<1",
+    "numpy>=1.26,<3",
+    "pillow>=13,<14",
+    "sentencepiece>=0.2,<1"
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "build>=1.2"]
+
+[project.urls]
+Source = "https://github.com/HyperGAN/zimage-conceptmod"
+
+[project.entry-points."conceptmod.backends"]
+zimage = "zimage_conceptmod.provider:PROVIDER"
+
+[tool.setuptools.packages.find]
+include = ["zimage_conceptmod*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--import-mode=importlib"
+markers = ["integration: explicitly requested local model or external application integration"]
