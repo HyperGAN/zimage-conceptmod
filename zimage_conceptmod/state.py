@@ -3,6 +3,7 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from dataclasses import asdict, is_dataclass
+from enum import Enum
 import hashlib
 import json
 import math
@@ -20,10 +21,18 @@ def _digest(value: bytes) -> str:
 
 
 def _plain(value):
-    if value is None or isinstance(value, (bool, int, str)):
-        return value
+    if isinstance(value, Enum):
+        return _plain(value.value)
+    if value is None:
+        return None
+    if isinstance(value, bool):
+        return bool(value)
+    if isinstance(value, int):
+        return int(value)
+    if isinstance(value, str):
+        return str(value)
     if isinstance(value, float):
-        return value if math.isfinite(value) else str(value)
+        return float(value) if math.isfinite(value) else str(value)
     if isinstance(value, torch.dtype):
         return str(value)
     if torch.is_tensor(value):
